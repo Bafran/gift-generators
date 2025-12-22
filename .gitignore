@@ -2,3 +2,4 @@
 *.jpg
 *:Zone.Identifier
 *.env
+__pycache__/
