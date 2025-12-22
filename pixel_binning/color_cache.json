@@ -1,0 +1,422 @@
+{
+  "4524929": {
+    "element_id": 4524929,
+    "color_name": "Bright orange",
+    "rgb": "FE8A18",
+    "rgb_tuple": [
+      254,
+      138,
+      24
+    ]
+  },
+  "6055169": {
+    "element_id": 6055169,
+    "color_name": "Earth Green",
+    "rgb": "184632",
+    "rgb_tuple": [
+      24,
+      70,
+      50
+    ]
+  },
+  "4619521": {
+    "element_id": 4619521,
+    "color_name": "Medium Lavender",
+    "rgb": "AC78BA",
+    "rgb_tuple": [
+      172,
+      120,
+      186
+    ]
+  },
+  "6058245": {
+    "element_id": 6058245,
+    "color_name": "Olive Green",
+    "rgb": "9B9A5A",
+    "rgb_tuple": [
+      155,
+      154,
+      90
+    ]
+  },
+  "6213778": {
+    "element_id": 6213778,
+    "color_name": "Bright bluish green",
+    "rgb": "008F9B",
+    "rgb_tuple": [
+      0,
+      143,
+      155
+    ]
+  },
+  "6401817": {
+    "element_id": 6401817,
+    "color_name": "Bright Green",
+    "rgb": "4B9F4A",
+    "rgb_tuple": [
+      75,
+      159,
+      74
+    ]
+  },
+  "6186012": {
+    "element_id": 6186012,
+    "color_name": "Dark Orange",
+    "rgb": "A95500",
+    "rgb_tuple": [
+      169,
+      85,
+      0
+    ]
+  },
+  "6058014": {
+    "element_id": 6058014,
+    "color_name": "Cool Yellow",
+    "rgb": "FFF03A",
+    "rgb_tuple": [
+      255,
+      240,
+      58
+    ]
+  },
+  "4210719": {
+    "element_id": 4210719,
+    "color_name": "Dark stone grey",
+    "rgb": "6C6E68",
+    "rgb_tuple": [
+      108,
+      110,
+      104
+    ]
+  },
+  "6058016": {
+    "element_id": 6058016,
+    "color_name": "Aqua",
+    "rgb": "ADC3C0",
+    "rgb_tuple": [
+      173,
+      195,
+      192
+    ]
+  },
+  "6099363": {
+    "element_id": 6099363,
+    "color_name": "Lavender",
+    "rgb": "E1D5ED",
+    "rgb_tuple": [
+      225,
+      213,
+      237
+    ]
+  },
+  "6184484": {
+    "element_id": 6184484,
+    "color_name": "Light Royal blue",
+    "rgb": "9FC3E9",
+    "rgb_tuple": [
+      159,
+      195,
+      233
+    ]
+  },
+  "6357797": {
+    "element_id": 6357797,
+    "color_name": "Light Nougat",
+    "rgb": "F6D7B3",
+    "rgb_tuple": [
+      246,
+      215,
+      179
+    ]
+  },
+  "6194729": {
+    "element_id": 6194729,
+    "color_name": "Dark Brown",
+    "rgb": "352100",
+    "rgb_tuple": [
+      53,
+      33,
+      0
+    ]
+  },
+  "6258091": {
+    "element_id": 6258091,
+    "color_name": "Coral",
+    "rgb": "FF698F",
+    "rgb_tuple": [
+      255,
+      105,
+      143
+    ]
+  },
+  "4184108": {
+    "element_id": 4184108,
+    "color_name": "Earth blue",
+    "rgb": "0A3463",
+    "rgb_tuple": [
+      10,
+      52,
+      99
+    ]
+  },
+  "6096942": {
+    "element_id": 6096942,
+    "color_name": "Bright reddish violet",
+    "rgb": "923978",
+    "rgb_tuple": [
+      146,
+      57,
+      120
+    ]
+  },
+  "4221744": {
+    "element_id": 4221744,
+    "color_name": "Reddish Brown",
+    "rgb": "582A12",
+    "rgb_tuple": [
+      88,
+      42,
+      18
+    ]
+  },
+  "6215606": {
+    "element_id": 6215606,
+    "color_name": "Medium Nougat",
+    "rgb": "AA7D55",
+    "rgb_tuple": [
+      170,
+      125,
+      85
+    ]
+  },
+  "6257079": {
+    "element_id": 6257079,
+    "color_name": "Sand blue",
+    "rgb": "6074A1",
+    "rgb_tuple": [
+      96,
+      116,
+      161
+    ]
+  },
+  "4549436": {
+    "element_id": 4549436,
+    "color_name": "Sand yellow",
+    "rgb": "958A73",
+    "rgb_tuple": [
+      149,
+      138,
+      115
+    ]
+  },
+  "4159553": {
+    "element_id": 4159553,
+    "color_name": "Brick yellow",
+    "rgb": "E4CD9E",
+    "rgb_tuple": [
+      228,
+      205,
+      158
+    ]
+  },
+  "302401": {
+    "element_id": 302401,
+    "color_name": "White",
+    "rgb": "FFFFFF",
+    "rgb_tuple": [
+      255,
+      255,
+      255
+    ]
+  },
+  "6217797": {
+    "element_id": 6217797,
+    "color_name": "Bright Purple",
+    "rgb": "C870A0",
+    "rgb_tuple": [
+      200,
+      112,
+      160
+    ]
+  },
+  "4211399": {
+    "element_id": 4211399,
+    "color_name": "Medium stone grey",
+    "rgb": "A0A5A9",
+    "rgb_tuple": [
+      160,
+      165,
+      169
+    ]
+  },
+  "6073040": {
+    "element_id": 6073040,
+    "color_name": "Flame yellowish orange",
+    "rgb": "F8BB3D",
+    "rgb_tuple": [
+      248,
+      187,
+      61
+    ]
+  },
+  "6231376": {
+    "element_id": 6231376,
+    "color_name": "Medium Lilac",
+    "rgb": "3F3691",
+    "rgb_tuple": [
+      63,
+      54,
+      145
+    ]
+  },
+  "302421": {
+    "element_id": 302421,
+    "color_name": "Bright red",
+    "rgb": "C91A09",
+    "rgb_tuple": [
+      201,
+      26,
+      9
+    ]
+  },
+  "6097493": {
+    "element_id": 6097493,
+    "color_name": "Medium Azure",
+    "rgb": "36AEBF",
+    "rgb_tuple": [
+      54,
+      174,
+      191
+    ]
+  },
+  "302423": {
+    "element_id": 302423,
+    "color_name": "Bright Blue",
+    "rgb": "0055BF",
+    "rgb_tuple": [
+      0,
+      85,
+      191
+    ]
+  },
+  "302424": {
+    "element_id": 302424,
+    "color_name": "Bright yellow",
+    "rgb": "F2CD37",
+    "rgb_tuple": [
+      242,
+      205,
+      55
+    ]
+  },
+  "6330584": {
+    "element_id": 6330584,
+    "color_name": "Nougat",
+    "rgb": "D09168",
+    "rgb_tuple": [
+      208,
+      145,
+      104
+    ]
+  },
+  "302426": {
+    "element_id": 302426,
+    "color_name": "Black",
+    "rgb": "05131D",
+    "rgb_tuple": [
+      5,
+      19,
+      29
+    ]
+  },
+  "6469084": {
+    "element_id": 6469084,
+    "color_name": "Red. Orange",
+    "rgb": "CA4C0B",
+    "rgb_tuple": [
+      202,
+      76,
+      11
+    ]
+  },
+  "302428": {
+    "element_id": 302428,
+    "color_name": "Dark green",
+    "rgb": "237841",
+    "rgb_tuple": [
+      35,
+      120,
+      65
+    ]
+  },
+  "4539114": {
+    "element_id": 4539114,
+    "color_name": "Dark red",
+    "rgb": "720E0F",
+    "rgb_tuple": [
+      114,
+      14,
+      15
+    ]
+  },
+  "6566896": {
+    "element_id": 6566896,
+    "color_name": "Spring Yellow Green",
+    "rgb": "DFEEA5",
+    "rgb_tuple": [
+      223,
+      238,
+      165
+    ]
+  },
+  "6151664": {
+    "element_id": 6151664,
+    "color_name": "Dark Azur",
+    "rgb": "078BC9",
+    "rgb_tuple": [
+      7,
+      139,
+      201
+    ]
+  },
+  "4179826": {
+    "element_id": 4179826,
+    "color_name": "Medium blue",
+    "rgb": "5A93DB",
+    "rgb_tuple": [
+      90,
+      147,
+      219
+    ]
+  },
+  "4621557": {
+    "element_id": 4621557,
+    "color_name": "Br. yellowish green",
+    "rgb": "BBE90B",
+    "rgb_tuple": [
+      187,
+      233,
+      11
+    ]
+  },
+  "6099189": {
+    "element_id": 6099189,
+    "color_name": "Sand green",
+    "rgb": "A0BCAC",
+    "rgb_tuple": [
+      160,
+      188,
+      172
+    ]
+  },
+  "6069887": {
+    "element_id": 6069887,
+    "color_name": "Warm Gold",
+    "rgb": "AA7F2E",
+    "rgb_tuple": [
+      170,
+      127,
+      46
+    ]
+  }
+}
