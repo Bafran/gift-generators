@@ -58,10 +58,13 @@ def generate_card_image(card_data, image_folder, output_path):
     # Save the final card image
     card_image.save(output_path)
 
+def generate_card_from_metadata(card_metadata_path, image_folder, output_card_path):
+    card_data = read_card_metadata(card_metadata_path)
+    generate_card_image(card_data, image_folder, output_card_path)
+
 if __name__ == "__main__":
     card_metadata_path = "card_metadata.json"
     image_folder = "icon_files"
     output_card_path = "generated_card.png"
 
-    card_data = read_card_metadata(card_metadata_path)
-    generate_card_image(card_data, image_folder, output_card_path)
+    generate_card_from_metadata(card_metadata_path, image_folder, output_card_path)

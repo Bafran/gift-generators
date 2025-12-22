@@ -107,7 +107,7 @@ class SimulationInstance:
                     dx = body_b.position.x - body_a.position.x
                     dy = body_b.position.y - body_a.position.y
                     distance = math.sqrt(dx**2 + dy**2)
-                    mass_factor = ((body_a.mass + body_b.mass) ** 1.25) / 4.0
+                    mass_factor = ((body_a.mass + body_b.mass) ** 1.5) / 4.0
                     
                     if distance > 0:
                         direction_x = dx / distance
@@ -123,8 +123,22 @@ class SimulationInstance:
         return True
 
     def run_simulation(self, verticies_list, output_file="card_metadata.json"):
-        # Create all bodies in the simulation
+        # Create all bodies in the simulation (pictures)
         self.create_all_bodies(verticies_list)
+
+        # Create a wall around the disk to contain the polygons
+        static_body = self.space.static_body
+        num_segments = 100
+        for i in range(num_segments):
+            angle1 = (2 * math.pi / num_segments) * i
+            angle2 = (2 * math.pi / num_segments) * (i + 1)
+            p1 = (self.center[0] + self.disk_radius * math.cos(angle1),
+                  self.center[1] + self.disk_radius * math.sin(angle1))
+            p2 = (self.center[0] + self.disk_radius * math.cos(angle2),
+                  self.center[1] + self.disk_radius * math.sin(angle2))
+            segment = pymunk.Segment(static_body, p1, p2, 1.0)
+            segment.friction = 1.0
+            self.space.add(segment)
         
         dt = 1.0 / self.fps
 
@@ -192,7 +206,7 @@ if __name__ == "__main__":
         masses.append(random.uniform(0.5, 1.5))
 
     total_mass = sum(masses)
-    masses = [m * (8.0 / total_mass) for m in masses]
+    masses = [(m * (8.0 / total_mass) * 1.1) for m in masses]
 
     verticies_list = [
         (compute_polygon_parts(image_path + "/batteries.png"), masses[0], "batteries"),

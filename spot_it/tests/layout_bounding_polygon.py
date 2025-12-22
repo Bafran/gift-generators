@@ -47,7 +47,7 @@ def compute_bounding_polygon(image_path, threshold=0, tolerance=1.0):
     centroid_y = np.mean([y for x, y in bounding_polygon])
     bounding_polygon = [(x - centroid_x, y - centroid_y) for x, y in bounding_polygon]
 
-    # Normalize the polygon to fit within a 50x50 box
+    # Normalize the polygon to fit within a box
     max_extent = max(max(abs(x) for x, y in bounding_polygon), max(abs(y) for x, y in bounding_polygon))
     scale_factor = 128.0 / max_extent
     bounding_polygon = [(x * scale_factor, y * scale_factor) for x, y in bounding_polygon]
