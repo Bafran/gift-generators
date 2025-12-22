@@ -46,7 +46,7 @@ def compute_bounding_polygon(image_path, threshold=0, resolution=1.0):
 
     # Normalize the polygon to fit within a 50x50 box
     max_extent = max(max(abs(x) for x, y in bounding_polygon), max(abs(y) for x, y in bounding_polygon))
-    scale_factor = 25.0 / max_extent  # 25.0 to fit within -25 to 25
+    scale_factor = 128.0 / max_extent
     bounding_polygon = [(x * scale_factor, y * scale_factor) for x, y in bounding_polygon]
 
     # Don't return the last point

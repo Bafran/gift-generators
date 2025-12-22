@@ -5,6 +5,8 @@ Generate the card image by reading in the image files and mapping according to c
 import json
 from PIL import Image, ImageDraw
 
+CARD_SIZE = 1024
+
 def read_card_metadata(file_path):
     with open(file_path, "r") as f:
         card_data = json.load(f)
@@ -12,15 +14,13 @@ def read_card_metadata(file_path):
 
 def generate_card_image(card_data, image_folder, output_path):
     # Create a blank white card
-    card_size = (1024, 1024)
+    card_size = (CARD_SIZE, CARD_SIZE)
     card_image = Image.new("RGBA", card_size, (255, 255, 255, 255))
     draw = ImageDraw.Draw(card_image)
 
     center = (card_size[0] // 2, card_size[1] // 2)
 
     for item in card_data:
-        print("Processing item:", item)
-
         image_id = item["id"]
         position = item["position"]
         angle = item["angle"]
@@ -30,8 +30,8 @@ def generate_card_image(card_data, image_folder, output_path):
         img_path = f"{image_folder}/{image_id}.png"
         img = Image.open(img_path).convert("RGBA")
 
-        # Scale the image based on mass
-        scale_factor = 0.1 * mass
+        # Scale the image to have it be nominally 256 x 256 pixels, adjusted by mass
+        scale_factor = (256.0 / max(img.width, img.height) * mass) * 0.85
         img = img.resize((int(img.width * scale_factor), int(img.height * scale_factor)))
 
         # Rotate the image
@@ -43,6 +43,14 @@ def generate_card_image(card_data, image_folder, output_path):
 
         # Paste the image onto the card
         card_image.paste(img, (pos_x, pos_y), img)
+
+    # Draw a disk surrounding the images
+    disk_radius = CARD_SIZE // 2
+    draw.ellipse(
+        [center[0] - disk_radius, center[1] - disk_radius,
+         center[0] + disk_radius, center[1] + disk_radius],
+        outline=(0, 0, 0), width=5
+    )
 
     # Save the final card image
     card_image.save(output_path)
