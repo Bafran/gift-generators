@@ -1,0 +1,1 @@
+# Generate the Spot It! "Layout" which defines which symbols go on which cards
