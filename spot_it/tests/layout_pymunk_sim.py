@@ -10,7 +10,7 @@ import pymunk.pygame_util
 import math
 import json
 
-from bounding_polygon_test import compute_polygon_parts
+from layout_bounding_polygon import compute_polygon_parts
 
 class SimulationInstance:
     def __init__(self, headless=True, width=800, height=600, disk_radius=300):
