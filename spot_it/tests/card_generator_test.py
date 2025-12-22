@@ -41,6 +41,9 @@ def generate_card_image(card_data, image_folder, output_path):
         pos_x = int(center[0] + position[0] - img.width // 2)
         pos_y = int(center[1] + position[1] - img.height // 2)
 
+        # Flip the image vertically to match coordinate system
+        img = img.transpose(Image.FLIP_TOP_BOTTOM)
+
         # Paste the image onto the card
         card_image.paste(img, (pos_x, pos_y), img)
 

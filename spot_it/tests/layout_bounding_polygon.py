@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from shapely.geometry import Polygon
 from shapely.ops import triangulate
 
-def compute_bounding_polygon(image_path, threshold=0, resolution=1.0):
+def compute_bounding_polygon(image_path, threshold=0, tolerance=1.0):
     # Load image and convert to RGBA
     img = Image.open(image_path).convert("RGBA")
     img_data = np.array(img)
@@ -34,10 +34,13 @@ def compute_bounding_polygon(image_path, threshold=0, resolution=1.0):
     largest_contour = max(contours, key=len)
 
     # Simplify the contour
-    simplified_contour = measure.approximate_polygon(largest_contour, tolerance=resolution)
+    simplified_contour = measure.approximate_polygon(largest_contour, tolerance=tolerance)
 
     # Convert contour coordinates to (x, y) tuples
     bounding_polygon = [(x, y) for y, x in simplified_contour]
+
+    # Flip over the y-axis to match image coordinates
+    bounding_polygon = [(x, img_data.shape[0] - y) for x, y in bounding_polygon]
 
     # Recenter the polygon to the origin by subtracting the centroid
     centroid_x = np.mean([x for x, y in bounding_polygon])
@@ -86,14 +89,13 @@ def plot(bounding_polygon, convex_parts):
     # Save image instead of showing it
     plt.savefig("bounding_polygon_output.png", bbox_inches='tight', pad_inches=0)
 
-def compute_polygon_parts(image_path, resolution=1.0):
-    bounding_polygon = compute_bounding_polygon(image_path, resolution)
+def compute_polygon_parts(image_path, tolerance=0.5):
+    bounding_polygon = compute_bounding_polygon(image_path, tolerance=tolerance)
     convex_parts = break_polygon_into_convex_parts(bounding_polygon)
     return convex_parts
 
 if __name__ == "__main__":
-    # image_path = "/home/achinoy/code/gift_generators/spot_it/testhorse.png"
-    image_path = "/home/achinoy/code/gift_generators/spot_it/tests/icon_files/push-pin.png"
-    bounding_polygon = compute_bounding_polygon(image_path, resolution=2.0)
+    image_path = "/home/achinoy/code/gift_generators/spot_it/tests/icon_files/cutter.png"
+    bounding_polygon = compute_bounding_polygon(image_path, tolerance=1.0)
     convex_parts = break_polygon_into_convex_parts(bounding_polygon)
     plot(bounding_polygon, convex_parts)

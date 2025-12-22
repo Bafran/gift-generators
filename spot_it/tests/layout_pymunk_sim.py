@@ -195,14 +195,14 @@ if __name__ == "__main__":
     masses = [m * (8.0 / total_mass) for m in masses]
 
     verticies_list = [
-        (compute_polygon_parts(image_path + "/batteries.png", resolution=2.0), masses[0], "batteries"),
-        (compute_polygon_parts(image_path + "/clock.png", resolution=2.0), masses[1], "clock"),
-        (compute_polygon_parts(image_path + "/computer.png", resolution=2.0), masses[2], "computer"),
-        (compute_polygon_parts(image_path + "/cutter.png", resolution=2.0), masses[3], "cutter"),
-        (compute_polygon_parts(image_path + "/lamp.png", resolution=2.0), masses[4], "lamp"),
-        (compute_polygon_parts(image_path + "/push-pin.png", resolution=2.0), masses[5], "push-pin"),
-        (compute_polygon_parts(image_path + "/ruler.png", resolution=2.0), masses[6], "ruler"),
-        (compute_polygon_parts(image_path + "/stapler-remover.png", resolution=2.0), masses[7], "stapler-remover"),
+        (compute_polygon_parts(image_path + "/batteries.png"), masses[0], "batteries"),
+        (compute_polygon_parts(image_path + "/clock.png"), masses[1], "clock"),
+        (compute_polygon_parts(image_path + "/computer.png"), masses[2], "computer"),
+        (compute_polygon_parts(image_path + "/cutter.png"), masses[3], "cutter"),
+        (compute_polygon_parts(image_path + "/lamp.png", tolerance=0.1), masses[4], "lamp"),
+        (compute_polygon_parts(image_path + "/push-pin.png"), masses[5], "push-pin"),
+        (compute_polygon_parts(image_path + "/ruler.png"), masses[6], "ruler"),
+        (compute_polygon_parts(image_path + "/stapler-remover.png"), masses[7], "stapler-remover"),
     ]
 
     sim = SimulationInstance(headless=False)
