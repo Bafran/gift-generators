@@ -40,6 +40,7 @@ class SimulationInstance:
         self.repulsion_strength = 1E7
         self.velocity_threshold = 1.5 # steady state threshold
         self.fps = 60
+        self.gravity_bias_index = None
 
         self.sim_bodies = []
 
@@ -86,9 +87,13 @@ class SimulationInstance:
             else:
                 self.create_polygon(vertices, position, scale_factor, rotation)
 
+        # Assign a random gravity bias index
+        self.gravity_bias_index = random.randint(0, len(verticies_list) - 1)
+        print(f"Gravity bias applied to object index: {self.gravity_bias_index}")
+
     def apply_radial_gravity(self):
         """Apply gravitational attraction towards the center for all bodies"""
-        for body, shape in self.sim_bodies:
+        for i, (body, shape) in enumerate(self.sim_bodies):
             dx = self.center[0] - body.position.x
             dy = self.center[1] - body.position.y
             distance = math.sqrt(dx**2 + dy**2)
@@ -97,6 +102,10 @@ class SimulationInstance:
                 direction_x = dx / distance
                 direction_y = dy / distance
                 force = self.gravity_strength * distance
+
+                if self.gravity_bias_index is not None and i == self.gravity_bias_index:
+                    force *= 2.0  # Apply a stronger force for the biased object
+
                 body.apply_force_at_world_point((direction_x * force, direction_y * force), body.position)
 
     def apply_repulsion_force(self):
@@ -221,5 +230,3 @@ if __name__ == "__main__":
 
     sim = SimulationInstance(headless=False)
     sim.run_simulation(verticies_list)
-
-    # NOTE: Maybe add a parameter which randomly assigns objects a greater radial gravity so it biases them towards the center?
