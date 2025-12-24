@@ -31,7 +31,7 @@ def generate_card_image(card_data, image_folder, output_path):
         img = Image.open(img_path).convert("RGBA")
 
         # Scale the image to have it be nominally 256 x 256 pixels, adjusted by mass
-        scale_factor = (256.0 / max(img.width, img.height) * mass) * 0.85
+        scale_factor = (256.0 / max(img.width, img.height) * mass) * 1.0
         img = img.resize((int(img.width * scale_factor), int(img.height * scale_factor)))
 
         # Rotate the image

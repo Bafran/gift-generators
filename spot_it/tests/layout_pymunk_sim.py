@@ -206,7 +206,7 @@ if __name__ == "__main__":
         masses.append(random.uniform(0.5, 1.5))
 
     total_mass = sum(masses)
-    masses = [(m * (8.0 / total_mass) * 1.1) for m in masses]
+    masses = [(m * (8.0 / total_mass) * 1.0) for m in masses]
 
     verticies_list = [
         (compute_polygon_parts(image_path + "/batteries.png"), masses[0], "batteries"),
@@ -221,3 +221,5 @@ if __name__ == "__main__":
 
     sim = SimulationInstance(headless=False)
     sim.run_simulation(verticies_list)
+
+    # NOTE: Maybe add a parameter which randomly assigns objects a greater radial gravity so it biases them towards the center?
