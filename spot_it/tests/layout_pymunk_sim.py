@@ -59,7 +59,8 @@ class SimulationInstance:
 
     def create_polygon(self, vertices, position, scale_factor=1.0, rotation=0.0):
         # Single polygon
-        scaled_vertices = [(x * scale_factor, y * scale_factor) for x, y in vertices]
+        padding_factor = 1.05
+        scaled_vertices = [(x * scale_factor * padding_factor, y * scale_factor * padding_factor) for x, y in vertices]
         moment = pymunk.moment_for_poly(scale_factor, scaled_vertices)
         body = pymunk.Body(scale_factor, moment)
         body.position = position
@@ -71,16 +72,14 @@ class SimulationInstance:
 
     def create_compound_polygon(self, vertices, position, scale_factor=1.0, rotation=0.0):
         # Compound shape - multiple polygon parts
-        scaled_parts = [[(x * scale_factor, y * scale_factor) for x, y in part] for part in vertices]
+        padding_factor = 1.05
+        scaled_parts = [[(x * scale_factor * padding_factor, y * scale_factor * padding_factor) for x, y in part] for part in vertices]
         
         # Filter out degenerate polygons (too small area)
         valid_parts = [part for part in scaled_parts if is_valid_polygon(part, min_area=1.0)]
         
         if not valid_parts:
-            # Fallback: if all parts are invalid, create a simple square
-            print(f"Warning: All polygon parts degenerate, using fallback square")
-            size = 20.0 * scale_factor
-            valid_parts = [[(-size/2, -size/2), (size/2, -size/2), (size/2, size/2), (-size/2, size/2)]]
+            exit()("Error: No valid polygon parts found for compound shape.")
         
         # Calculate total moment as sum of all parts
         mass_per_part = scale_factor / len(valid_parts)
