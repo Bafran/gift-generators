@@ -37,6 +37,9 @@ def all_lines(n):
             [line_at_infinity(n)])
 
 def make_deck(n, pics):
+    if len(pics) != n * n + n + 1:
+        raise ValueError(f"Expected {n * n + n + 1} pics for order {n}, got {len(pics)}")
+
     points = all_points(n)
 
     # create a mapping from point to pic
@@ -54,7 +57,7 @@ if __name__ == "__main__":
     # Total symbols needed: n² + n + 1 = 57 for n=7
     num_symbols = n * n + n + 1
     
-    # Create symbol names (you can replace these with actual image names)
+    # Create symbol names
     symbols = [f"symbol_{i}" for i in range(num_symbols)]
     
     # Generate the deck

@@ -11,7 +11,7 @@ import math
 import json
 import random
 
-from layout_bounding_polygon import compute_polygon_parts
+from layout_scripts.layout_bounding_polygon import compute_polygon_parts
 
 def is_valid_polygon(vertices, min_area=1.0):
     """Check if a polygon has sufficient area to be valid for physics simulation."""

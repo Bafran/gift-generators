@@ -27,7 +27,7 @@ def generate_card_image(card_data, image_folder, output_path):
         mass = item["mass"]
 
         # Load the image
-        img_path = f"{image_folder}/{image_id}.png"
+        img_path = f"{image_folder}/{image_id}"
         img = Image.open(img_path).convert("RGBA")
 
         # Scale the image to have it be nominally 256 x 256 pixels, adjusted by mass
