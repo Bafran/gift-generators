@@ -181,7 +181,7 @@ class SimulationInstance:
                 return False
         return True
 
-    def run_simulation(self, verticies_list, output_file="card_metadata.json", num_static_points=5):
+    def run_simulation(self, verticies_list, output_file="card_metadata.json", num_static_points=3):
         # Create static repulsion points for more organic layouts
         self.create_static_repulsion_points(num_static_points)
         
@@ -287,5 +287,5 @@ if __name__ == "__main__":
         (compute_polygon_parts(image_path + "/stapler-remover.png"), masses[7], "stapler-remover"),
     ]
 
-    sim = SimulationInstance(headless=False)
+    sim = SimulationInstance(headless=True)
     sim.run_simulation(verticies_list)
