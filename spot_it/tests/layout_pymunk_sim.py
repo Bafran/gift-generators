@@ -56,6 +56,7 @@ class SimulationInstance:
         self.gravity_bias_index = None
 
         self.sim_bodies = []
+        self.static_points = []  # List of (position, mass) tuples for static repulsion points
 
     def create_polygon(self, vertices, position, scale_factor=1.0, rotation=0.0):
         # Single polygon
@@ -95,6 +96,18 @@ class SimulationInstance:
         self.space.add(body, *shapes)
         self.sim_bodies.append((body, shapes[0]))
 
+    def create_static_repulsion_points(self, num_points=5, mass_range=(0.1, 0.3)):
+        """Create random static points that provide additional repulsion forces."""
+        for _ in range(num_points):
+            # Random position within the disk
+            angle = random.uniform(0, 2 * math.pi)
+            radius = random.uniform(0, self.disk_radius * 0.8)  # Keep within 80% of disk radius
+            position = (self.center[0] + radius * math.cos(angle), 
+                       self.center[1] + radius * math.sin(angle))
+            mass = random.uniform(*mass_range)
+            self.static_points.append((position, mass))
+        print(f"Created {num_points} static repulsion points")
+
     def create_all_bodies(self, verticies_list):
         for i, (vertices, scale_factor, image_name) in enumerate(verticies_list):
             angle = i * (2 * math.pi / len(verticies_list))
@@ -132,8 +145,9 @@ class SimulationInstance:
                 body.apply_force_at_world_point((direction_x * force, direction_y * force), body.position)
 
     def apply_repulsion_force(self):
-        """Apply a repulsion force to each body from every other body"""
+        """Apply a repulsion force to each body from every other body and static points"""
         for i, (body_a, shape_a) in enumerate(self.sim_bodies):
+            # Repulsion from other bodies
             for j, (body_b, shape_b) in enumerate(self.sim_bodies):
                 if i != j:
                     dx = body_b.position.x - body_a.position.x
@@ -146,6 +160,19 @@ class SimulationInstance:
                         direction_y = dy / distance
                         force = (self.repulsion_strength / (distance ** 2)) * mass_factor
                         body_a.apply_force_at_world_point((-direction_x * force, -direction_y * force), body_a.position)
+            
+            # Repulsion from static points
+            for static_pos, static_mass in self.static_points:
+                dx = static_pos[0] - body_a.position.x
+                dy = static_pos[1] - body_a.position.y
+                distance = math.sqrt(dx**2 + dy**2)
+                mass_factor = ((body_a.mass + static_mass) ** 1.5) / 4.0
+                
+                if distance > 0:
+                    direction_x = dx / distance
+                    direction_y = dy / distance
+                    force = (self.repulsion_strength / (distance ** 2)) * mass_factor
+                    body_a.apply_force_at_world_point((-direction_x * force, -direction_y * force), body_a.position)
 
     def check_steady_state(self):
         """Check if all bodies are below a certain velocity threshold"""
@@ -154,7 +181,10 @@ class SimulationInstance:
                 return False
         return True
 
-    def run_simulation(self, verticies_list, output_file="card_metadata.json"):
+    def run_simulation(self, verticies_list, output_file="card_metadata.json", num_static_points=5):
+        # Create static repulsion points for more organic layouts
+        self.create_static_repulsion_points(num_static_points)
+        
         # Create all bodies in the simulation (pictures)
         self.create_all_bodies(verticies_list)
 
@@ -187,6 +217,12 @@ class SimulationInstance:
                 # Clear screen and draw
                 self.screen.fill((255, 255, 255))
                 pygame.draw.circle(self.screen, (200, 200, 200), self.center, self.disk_radius, 2)
+                
+                # Draw static repulsion points
+                for static_pos, static_mass in self.static_points:
+                    radius = max(3, int(static_mass * 10))  # Scale radius by mass
+                    pygame.draw.circle(self.screen, (255, 100, 100), (int(static_pos[0]), int(static_pos[1])), radius)
+                
                 self.space.debug_draw(self.draw_options)
 
                 pygame.display.flip()
@@ -235,7 +271,7 @@ if __name__ == "__main__":
     masses = []
 
     for i in range(8):
-        masses.append(random.uniform(0.5, 1.5))
+        masses.append(random.normalvariate(1.0, 0.3))
 
     total_mass = sum(masses)
     masses = [(m * (8.0 / total_mass)) for m in masses]
