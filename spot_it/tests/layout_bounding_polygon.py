@@ -111,7 +111,7 @@ def compute_polygon_parts(image_path, tolerance=0.5):
     return convex_parts
 
 if __name__ == "__main__":
-    image_path = "/home/achinoy/code/gift_generators/spot_it/tests/icon_files/cutter.png"
+    image_path = "/home/achinoy/code/gift_generators/spot_it/tests/icon_files/clock.png"
     bounding_polygon = compute_bounding_polygon(image_path, tolerance=1.0)
     convex_parts = break_polygon_into_convex_parts(bounding_polygon)
     plot(bounding_polygon, convex_parts, image_path)

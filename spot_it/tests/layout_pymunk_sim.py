@@ -13,6 +13,19 @@ import random
 
 from layout_bounding_polygon import compute_polygon_parts
 
+def is_valid_polygon(vertices, min_area=1.0):
+    """Check if a polygon has sufficient area to be valid for physics simulation."""
+    if len(vertices) < 3:
+        return False
+    # Calculate area using shoelace formula
+    area = 0.0
+    for i in range(len(vertices)):
+        x1, y1 = vertices[i]
+        x2, y2 = vertices[(i + 1) % len(vertices)]
+        area += x1 * y2 - x2 * y1
+    area = abs(area) / 2.0
+    return area >= min_area
+
 class SimulationInstance:
     def __init__(self, headless=True, width=1024, height=1024):
         self.headless = headless
@@ -59,13 +72,24 @@ class SimulationInstance:
     def create_compound_polygon(self, vertices, position, scale_factor=1.0, rotation=0.0):
         # Compound shape - multiple polygon parts
         scaled_parts = [[(x * scale_factor, y * scale_factor) for x, y in part] for part in vertices]
+        
+        # Filter out degenerate polygons (too small area)
+        valid_parts = [part for part in scaled_parts if is_valid_polygon(part, min_area=1.0)]
+        
+        if not valid_parts:
+            # Fallback: if all parts are invalid, create a simple square
+            print(f"Warning: All polygon parts degenerate, using fallback square")
+            size = 20.0 * scale_factor
+            valid_parts = [[(-size/2, -size/2), (size/2, -size/2), (size/2, size/2), (-size/2, size/2)]]
+        
         # Calculate total moment as sum of all parts
-        total_moment = sum(pymunk.moment_for_poly(scale_factor / len(scaled_parts), verts) for verts in scaled_parts)
+        mass_per_part = scale_factor / len(valid_parts)
+        total_moment = sum(pymunk.moment_for_poly(mass_per_part, verts) for verts in valid_parts)
         body = pymunk.Body(scale_factor, total_moment)
         body.position = position
         body.angle = rotation
         shapes = []
-        for part_vertices in scaled_parts:
+        for part_vertices in valid_parts:
             shape = pymunk.Poly(body, part_vertices)
             shape.friction = 0.5
             shapes.append(shape)
