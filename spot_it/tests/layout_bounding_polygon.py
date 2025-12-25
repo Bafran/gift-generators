@@ -42,10 +42,10 @@ def compute_bounding_polygon(image_path, threshold=0, tolerance=1.0):
     # Flip over the y-axis to match image coordinates
     bounding_polygon = [(x, img_data.shape[0] - y) for x, y in bounding_polygon]
 
-    # Recenter the polygon to the origin by subtracting the centroid
-    centroid_x = np.mean([x for x, y in bounding_polygon])
-    centroid_y = np.mean([y for x, y in bounding_polygon])
-    bounding_polygon = [(x - centroid_x, y - centroid_y) for x, y in bounding_polygon]
+    # Recenter the polygon to the origin by subtracting 1/2 of the x and 1/2 of the y of the original image size
+    center_x = img_data.shape[1] / 2.0
+    center_y = img_data.shape[0] / 2.0
+    bounding_polygon = [(x - center_x, y - center_y) for x, y in bounding_polygon]
 
     # Normalize the polygon to fit within a box
     max_extent = max(max(abs(x) for x, y in bounding_polygon), max(abs(y) for x, y in bounding_polygon))
@@ -73,7 +73,7 @@ def break_polygon_into_convex_parts(bounding_polygon):
 
     return convex_parts
 
-def plot(bounding_polygon, convex_parts):
+def plot(bounding_polygon, convex_parts, image_path):
     # Plot the bounding polygon and its convex parts
     plt.figure()
     if convex_parts is not None:
@@ -85,6 +85,22 @@ def plot(bounding_polygon, convex_parts):
     # Draw bounding polygon outline
     xs, ys = zip(*bounding_polygon)
     plt.plot(xs + (xs[0],), ys + (ys[0],), color='black', linewidth=2)
+
+    # Overlay the original image and scale it the same way card gen does
+    img = Image.open(image_path).convert("RGBA")
+    mass = 1.0  # Assuming mass is defined somewhere; replace with actual value if needed
+    # Scale the image to have it be nominally 256 x 256 pixels, adjusted by mass
+    scale_factor = (256.0 / max(img.width, img.height) * mass) * 1.0
+    img = img.resize((int(img.width * scale_factor), int(img.height * scale_factor)))
+    img_data = np.array(img)
+    padding = 50
+    padded_img_data = np.zeros((img_data.shape[0] + 2 * padding,
+                                img_data.shape[1] + 2 * padding,
+                                4), dtype=img_data.dtype)
+    padded_img_data[padding:-padding, padding:-padding, :] = img_data
+    img_data = padded_img_data
+    extent = [-img_data.shape[1]//2, img_data.shape[1]//2, -img_data.shape[0]//2, img_data.shape[0]//2]
+    plt.imshow(img_data, extent=extent)
 
     # Save image instead of showing it
     plt.savefig("bounding_polygon_output.png", bbox_inches='tight', pad_inches=0)
@@ -98,4 +114,4 @@ if __name__ == "__main__":
     image_path = "/home/achinoy/code/gift_generators/spot_it/tests/icon_files/cutter.png"
     bounding_polygon = compute_bounding_polygon(image_path, tolerance=1.0)
     convex_parts = break_polygon_into_convex_parts(bounding_polygon)
-    plot(bounding_polygon, convex_parts)
+    plot(bounding_polygon, convex_parts, image_path)

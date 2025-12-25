@@ -215,7 +215,7 @@ if __name__ == "__main__":
         masses.append(random.uniform(0.5, 1.5))
 
     total_mass = sum(masses)
-    masses = [(m * (8.0 / total_mass) * 1.0) for m in masses]
+    masses = [(m * (8.0 / total_mass)) for m in masses]
 
     verticies_list = [
         (compute_polygon_parts(image_path + "/batteries.png"), masses[0], "batteries"),
