@@ -12,8 +12,8 @@ from layout_scripts.layout_card_generator import generate_card_from_metadata
 IMAGE_DIR = "card_images"
 
 if __name__ == "__main__":
-    # Grab all symbols from IMAGE_DIR
-    image_names = sorted(os.listdir(IMAGE_DIR))
+    # Grab all symbols from IMAGE_DIR that end in .png
+    image_names = sorted([f for f in os.listdir(IMAGE_DIR) if f.endswith(".png")])
 
     # Create the deck
     n = 7
