@@ -1,2 +1,4 @@
 /card_images
 /__pycache__
+/output_cards
+*metadata*.json
