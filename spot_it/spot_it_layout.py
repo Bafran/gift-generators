@@ -10,6 +10,7 @@ from spot_it_schematic import make_deck
 from layout_scripts.layout_bounding_polygon import compute_polygon_parts
 from layout_scripts.layout_pymunk_sim import SimulationInstance
 from layout_scripts.layout_card_generator import generate_card_from_metadata
+from layout_scripts.layout_tuning_gui import open_tuning_gui
 
 IMAGE_DIR = "card_images"
 CANDIDATES_DIR = "candidates"
@@ -149,6 +150,20 @@ def append_candidates(card_number, image_set, image_polygon_parts, candidate_pat
         metadata_paths.append(metadata_path)
         candidate_paths.append(candidate_path)
 
+
+def offer_tuning(metadata_path, card_number):
+    """Prompt user if they want to tune the selected card."""
+    while True:
+        response = input(f"\nWould you like to tune card {card_number:02d}? (y/n): ").strip().lower()
+        if response == "y":
+            open_tuning_gui(metadata_path, IMAGE_DIR, card_number)
+            return True
+        elif response == "n":
+            return False
+        else:
+            print("Invalid choice. Enter 'y' or 'n'.")
+
+
 if __name__ == "__main__":
     # Grab all symbols from IMAGE_DIR that end in .png
     image_names = sorted([f for f in os.listdir(IMAGE_DIR) if f.endswith(".png")])
@@ -182,15 +197,22 @@ if __name__ == "__main__":
             print(f"Generating 3 additional candidates for card {card_number:02d}...")
             append_candidates(card_number, image_set, image_polygon_parts, candidate_paths, metadata_paths, count=3)
 
-        final_card_path = f"{OUTPUT_DIR}/card_{card_number:02d}.png"
-        os.replace(candidate_paths[selected_idx], final_card_path)
+        selected_metadata_path = metadata_paths[selected_idx]
+        
+        # Offer tuning option
+        offer_tuning(selected_metadata_path, card_number)
+        
+        # Regenerate the final card image from the (possibly tuned) metadata
+        generate_card_from_metadata(selected_metadata_path, IMAGE_DIR, f"{OUTPUT_DIR}/card_{card_number:02d}.png")
 
+        final_card_path = f"{OUTPUT_DIR}/card_{card_number:02d}.png"
+        print(f"Saved final card to {final_card_path}")
+        
+        # Clean up candidate files
         for idx, path in enumerate(candidate_paths):
-            if idx != selected_idx and os.path.exists(path):
+            if os.path.exists(path):
                 os.remove(path)
 
         for metadata_path in metadata_paths:
             if os.path.exists(metadata_path):
                 os.remove(metadata_path)
-
-        print(f"Saved selected card to {final_card_path}")
