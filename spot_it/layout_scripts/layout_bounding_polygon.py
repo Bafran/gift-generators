@@ -39,7 +39,7 @@ def compute_bounding_polygon(image_path, threshold=0, tolerance=1.0):
     # Convert contour coordinates to (x, y) tuples
     bounding_polygon = [(x, y) for y, x in simplified_contour]
 
-    # Flip over the y-axis to match image coordinates
+    # Convert image-space Y-down contour points to a Y-up frame for simulation.
     bounding_polygon = [(x, img_data.shape[0] - y) for x, y in bounding_polygon]
 
     # Recenter the polygon to the origin by subtracting 1/2 of the x and 1/2 of the y of the original image size

@@ -3,6 +3,7 @@ Generate the card image by reading in the image files and mapping according to c
 """
 
 import json
+import math
 from PIL import Image, ImageDraw
 
 CARD_SIZE = 1024
@@ -34,15 +35,12 @@ def generate_card_image(card_data, image_folder, output_path):
         scale_factor = (256.0 / max(img.width, img.height) * mass) * 1.0
         img = img.resize((int(img.width * scale_factor), int(img.height * scale_factor)))
 
-        # Rotate the image
-        img = img.rotate(angle * (180.0 / 3.14159265), expand=True)
+        # Convert simulation (Y-up) angle to image-space (Y-down) rotation.
+        img = img.rotate(-math.degrees(angle), expand=True)
 
         # Calculate position on the card
         pos_x = int(center[0] + position[0] - img.width // 2)
-        pos_y = int(center[1] + position[1] - img.height // 2)
-
-        # Flip the image vertically to match coordinate system
-        img = img.transpose(Image.FLIP_TOP_BOTTOM)
+        pos_y = int(center[1] - position[1] - img.height // 2)
 
         # Paste the image onto the card
         card_image.paste(img, (pos_x, pos_y), img)

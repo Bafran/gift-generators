@@ -3,6 +3,8 @@ Generate the Spot It! "Layout" which defines which symbols go on which cards
 """
 import os
 import random
+import json
+import hashlib
 
 from spot_it_schematic import make_deck
 from layout_scripts.layout_bounding_polygon import compute_polygon_parts
@@ -12,6 +14,88 @@ from layout_scripts.layout_card_generator import generate_card_from_metadata
 IMAGE_DIR = "card_images"
 CANDIDATES_DIR = "candidates"
 OUTPUT_DIR = "output_cards"
+POLYGON_CACHE_FILE = "polygon_parts_cache.json"
+
+
+def compute_directory_md5(dir_path, suffix=".png"):
+    """Compute a stable MD5 digest across file names and contents in a directory."""
+    hasher = hashlib.md5()
+    file_paths = []
+    for name in os.listdir(dir_path):
+        if name.endswith(suffix):
+            file_paths.append(os.path.join(dir_path, name))
+
+    for file_path in sorted(file_paths):
+        rel_name = os.path.relpath(file_path, dir_path).replace("\\", "/")
+        hasher.update(rel_name.encode("utf-8"))
+        with open(file_path, "rb") as f:
+            while True:
+                chunk = f.read(8192)
+                if not chunk:
+                    break
+                hasher.update(chunk)
+    return hasher.hexdigest()
+
+
+def serialize_polygon_parts(polygon_parts):
+    """Convert polygon tuples to JSON-safe nested lists."""
+    return {
+        image_name: [
+            [[float(x), float(y)] for x, y in part]
+            for part in parts
+        ]
+        for image_name, parts in polygon_parts.items()
+    }
+
+
+def deserialize_polygon_parts(serialized_parts):
+    """Convert JSON-safe nested lists back to tuples for simulation use."""
+    return {
+        image_name: [
+            [(float(x), float(y)) for x, y in part]
+            for part in parts
+        ]
+        for image_name, parts in serialized_parts.items()
+    }
+
+
+def load_or_compute_polygon_parts(image_dir, image_names, cache_file):
+    """Load precomputed polygon parts when inputs are unchanged, otherwise recompute and cache."""
+    images_md5 = compute_directory_md5(image_dir)
+    cache_exists = os.path.exists(cache_file)
+    cached_data = None
+
+    if cache_exists:
+        try:
+            with open(cache_file, "r") as f:
+                cached_data = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            cached_data = None
+
+    if cached_data is not None:
+        cached_md5 = cached_data.get("images_md5")
+        cached_parts = cached_data.get("polygon_parts")
+        if (
+            cached_md5 == images_md5
+            and isinstance(cached_parts, dict)
+            and set(cached_parts.keys()) == set(image_names)
+        ):
+            print(f"Polygon cache hit ({cache_file}); loading precomputed parts.")
+            return deserialize_polygon_parts(cached_parts)
+
+    print("Polygon cache miss; recomputing all polygon parts.")
+    polygon_parts = {}
+    for image_name in image_names:
+        polygon_parts[image_name] = compute_polygon_parts(os.path.join(image_dir, image_name))
+
+    cache_payload = {
+        "images_md5": images_md5,
+        "polygon_parts": serialize_polygon_parts(polygon_parts),
+    }
+    with open(cache_file, "w") as f:
+        json.dump(cache_payload, f, indent=2)
+    print(f"Saved polygon cache to {cache_file}.")
+    return polygon_parts
 
 
 def choose_candidate(card_index, candidate_paths):
@@ -73,10 +157,7 @@ if __name__ == "__main__":
     n = 7
     deck = make_deck(n, image_names)
 
-    # Pre-compute the polygon parts for each image
-    image_polygon_parts = {}
-    for i, image_name in enumerate(image_names):
-        image_polygon_parts[image_name] = compute_polygon_parts(os.path.join(IMAGE_DIR, image_name))
+    image_polygon_parts = load_or_compute_polygon_parts(IMAGE_DIR, image_names, POLYGON_CACHE_FILE)
 
     # Create output directories if they don't exist.
     if not os.path.exists(CANDIDATES_DIR):
