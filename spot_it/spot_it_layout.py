@@ -5,6 +5,7 @@ import os
 import random
 import json
 import hashlib
+import argparse
 
 from spot_it_schematic import make_deck
 from layout_scripts.layout_bounding_polygon import compute_polygon_parts
@@ -165,12 +166,26 @@ def offer_tuning(metadata_path, card_number):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Generate Spot It card layouts and optionally start from a specific card number."
+    )
+    parser.add_argument(
+        "--card",
+        type=int,
+        default=1,
+        help="One-indexed card number to start from (default: 1).",
+    )
+    args = parser.parse_args()
+
     # Grab all symbols from IMAGE_DIR that end in .png
     image_names = sorted([f for f in os.listdir(IMAGE_DIR) if f.endswith(".png")])
 
     # Create the deck
     n = 7
     deck = make_deck(n, image_names)
+
+    if args.card < 1 or args.card > len(deck):
+        parser.error(f"--card must be between 1 and {len(deck)} (got {args.card}).")
 
     image_polygon_parts = load_or_compute_polygon_parts(IMAGE_DIR, image_names, POLYGON_CACHE_FILE)
 
@@ -181,8 +196,7 @@ if __name__ == "__main__":
         os.makedirs(OUTPUT_DIR)
 
     # Create the card for each image set in the deck
-    for i, image_set in enumerate(deck):
-        card_number = i + 1
+    for card_number, image_set in enumerate(deck[args.card - 1 :], start=args.card):
 
         candidate_paths = []
         metadata_paths = []

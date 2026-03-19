@@ -22,7 +22,7 @@ def vertical_line(x, n):
     """returns the vertical line with the specified x-coordinate
     in the finite projective plane of degree n
     includes 'infinity infinity'"""
-    return [(x, y) for y in range(n)] + ["∞"]
+    return [(x, y) for y in range(n)] + ["infinity"]
 
 def line_at_infinity(n):
     """the line at infinity just contains the points at infinity"""
